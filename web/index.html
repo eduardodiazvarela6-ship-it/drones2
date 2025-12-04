@@ -1,442 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monitoreo de Calidad de Aire - Lima y Callao</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-XQyb3R7k7rGqHgd6cwqBJ38qRAjPR9U1FVLtZL1NVr7DiIP9N6byN1Nsx3Rp3XIan2nKxux1DPZLJYhi3R7S+w==" crossorigin="">
-  <style>
-    :root {
-      --bg: #0f172a;
-      --panel: #0b1120;
-      --card: #111827;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --good: #16a34a;
-      --moderate: #eab308;
-      --sensitive: #f97316;
-      --unhealthy: #ef4444;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 20% 20%, #0a1628, #050b16 50%),
-                  radial-gradient(circle at 80% 0%, rgba(56,189,248,0.08), transparent 40%),
-                  radial-gradient(circle at 50% 100%, rgba(16,185,129,0.06), transparent 35%),
-                  var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    header {
-      padding: 18px 24px;
-      border-bottom: 1px solid rgba(148,163,184,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    header .title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    header h1 {
-      font-size: 20px;
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-    header .badge {
-      background: rgba(56,189,248,0.15);
-      color: var(--accent);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 12px;
-    }
-    header .meta {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      font-size: 13px;
-      color: var(--muted);
-      flex-wrap: wrap;
-    }
-    .layout {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      min-height: calc(100vh - 76px);
-    }
-    @media (max-width: 960px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-    aside {
-      background: rgba(11,17,32,0.9);
-      border-right: 1px solid rgba(148,163,184,0.15);
-      padding: 18px;
-      overflow-y: auto;
-    }
-    main {
-      position: relative;
-      padding: 18px;
-      overflow: hidden;
-    }
-    .card {
-      background: linear-gradient(145deg, #0f172a 0%, #0b1225 100%);
-      border: 1px solid rgba(148,163,184,0.12);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
-    }
-    .search {
-      width: 100%;
-      padding: 12px;
-      background: #0a1423;
-      border: 1px solid rgba(148,163,184,0.25);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-    .chip {
-      padding: 6px 10px;
-      border-radius: 10px;
-      background: rgba(148,163,184,0.12);
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .chip.active { background: rgba(56,189,248,0.18); color: var(--accent); border: 1px solid rgba(56,189,248,0.4); }
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-    .kpi { padding: 10px; border-radius: 12px; background: rgba(148,163,184,0.08); border: 1px solid rgba(148,163,184,0.1); }
-    .kpi .label { color: var(--muted); font-size: 12px; }
-    .kpi .value { font-weight: 700; font-size: 18px; }
-    .station-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-    .station {
-      border-radius: 12px;
-      padding: 12px;
-      background: #0c1628;
-      border: 1px solid rgba(148,163,184,0.12);
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .station:hover { border-color: rgba(56,189,248,0.4); transform: translateY(-2px); }
-    .station .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .station .title { font-weight: 700; font-size: 14px; }
-    .station .subtitle { color: var(--muted); font-size: 12px; }
-    .pill {
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 12px;
-      color: #020617;
-    }
-    .pill.good { background: #22c55e; }
-    .pill.moderate { background: #eab308; }
-    .pill.sensitive { background: #fb923c; }
-    .pill.unhealthy { background: #f87171; }
-    #map { width: 100%; height: calc(100vh - 160px); border-radius: 16px; border: 1px solid rgba(148,163,184,0.2); }
-    .legend { position: absolute; bottom: 18px; left: 24px; background: rgba(11,17,32,0.92); padding: 10px; border-radius: 10px; border: 1px solid rgba(148,163,184,0.2); font-size: 12px; }
-    .legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-    .dot { width: 10px; height: 10px; border-radius: 999px; }
-    .drawer {
-      position: absolute;
-      right: 24px;
-      top: 24px;
-      width: min(380px, 90vw);
-      background: rgba(15,23,42,0.96);
-      border-radius: 16px;
-      border: 1px solid rgba(56,189,248,0.25);
-      box-shadow: 0 25px 80px rgba(0,0,0,0.45);
-      padding: 16px;
-      max-height: calc(100vh - 60px);
-      overflow: auto;
-    }
-    .drawer h3 { margin: 0 0 8px 0; }
-    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
-    .metric { background: #0b1424; border: 1px solid rgba(148,163,184,0.15); border-radius: 10px; padding: 10px; }
-    .metric .label { color: var(--muted); font-size: 12px; }
-    .metric .value { font-weight: 700; font-size: 16px; }
-    .sources { font-size: 13px; color: var(--muted); line-height: 1.5; }
-    .tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: rgba(56,189,248,0.12); color: var(--accent); font-weight: 600; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
-    footer { padding: 14px 18px; font-size: 12px; color: var(--muted); border-top: 1px solid rgba(148,163,184,0.15); background: rgba(11,17,32,0.9); }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perú AirWatch – Lima y Callao</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/typography.css" />
+  <link rel="stylesheet" href="./css/layout.css" />
+  <link rel="stylesheet" href="./css/map.css" />
+  <link rel="stylesheet" href="./css/cards.css" />
+  <link rel="stylesheet" href="./css/drawer.css" />
+  <link rel="stylesheet" href="./css/leaderboard.css" />
+  <link rel="stylesheet" href="./css/timeline.css" />
+  <link rel="stylesheet" href="./css/alerts.css" />
+  <link rel="stylesheet" href="./css/footer.css" />
 </head>
 <body>
-  <header>
-    <div class="title">
-      <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="drone" width="32" height="32">
+  <div class="app">
+    <header class="header">
       <div>
-        <h1>EcoDrones | Calidad de aire Lima & Callao</h1>
-        <div class="meta">
-          <span id="timestamp"></span>
-          <span>Referencia visual estilo WAQI, cobertura Perú</span>
-          <span class="badge" id="departments-badge">10 departamentos activos</span>
+        <div class="title">Perú AirWatch</div>
+        <div class="subtitle">Inspirado en WAQI · Red prioritaria Lima + Callao</div>
+      </div>
+      <div class="badges" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <span class="badge">Cobertura 10 departamentos</span>
+        <span class="badge">Datos horarios simulados</span>
+        <span class="badge">Última actualización <span id="last-updated">--</span></span>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="map-shell">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <button id="btn-geo">Mi ubicación</button>
+          <button id="btn-reset">Restablecer vista</button>
+        </div>
+        <div class="legend">
+          <strong>Rango AQI</strong>
+          <span><span class="status-dot status-good"></span> 0-99 Bueno</span>
+          <span><span class="status-dot status-warn"></span> 100-149 Moderado</span>
+          <span><span class="status-dot status-danger"></span> 150+ Peligro</span>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="hero">
+          <div>
+            <div class="section-title">Monitor nacional</div>
+            <div class="meta">Datos priorizados para Lima y Callao con estaciones espejo WAQI</div>
+          </div>
+          <div class="pill">Perú · Lima 2025</div>
+        </div>
+
+        <div class="scrollable">
+          <div class="top-row">
+            <div class="kpi"><div class="label">AQI promedio</div><div class="value" id="kpi-aqi">--</div><div class="meta">Promedio ponderado distrital</div></div>
+            <div class="kpi"><div class="label">Alertas</div><div class="value" id="kpi-critical">--</div><div class="meta">PM y gases criterio</div></div>
+            <div class="kpi"><div class="label">Cobertura</div><div class="value" id="kpi-coverage">--</div><div class="meta">Puntos nacionales</div></div>
+            <div class="kpi"><div class="label">Última muestra</div><div class="value" id="kpi-updated">--</div><div class="meta">Hora local</div></div>
+          </div>
+
+          <div class="search" style="margin:14px 0 6px;">
+            <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.65" y1="16.65" x2="21" y2="21"></line></svg>
+            <input id="search" type="search" placeholder="Buscar distrito o zona de Lima" />
+          </div>
+
+          <div class="filters">
+            <div class="chip active" data-filter="all">Todas</div>
+            <div class="chip" data-filter="departamento" data-value="Lima">Lima</div>
+            <div class="chip" data-filter="departamento" data-value="Callao">Callao</div>
+            <div class="chip" data-filter="estado" data-value="peligro">Peligro</div>
+            <div class="chip" data-filter="estado" data-value="moderado">Moderado</div>
+            <div class="chip" data-filter="estado" data-value="aceptable">Aceptable</div>
+          </div>
+
+          <div class="station-list"></div>
+
+          <div class="timeline" style="margin-top:10px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Tendencia horaria Lima/Callao</div>
+                <div class="card-subtitle">PM2.5, PM10 y CO₂ escalados</div>
+              </div>
+              <span class="tag">Ult. 14 horas</span>
+            </div>
+            <div class="chart"><canvas id="timeline-canvas"></canvas></div>
+            <div class="axis">
+              <span>05:00</span><span>09:00</span><span>13:00</span><span>18:00</span>
+            </div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="leaderboard"></div>
+
+          <div class="separator"></div>
+
+          <div>
+            <div class="section-title">Alertas y recomendaciones</div>
+            <div class="section-subtitle">Mensajes coordinados con salud y transporte</div>
+            <div class="alerts" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div>
+            <div class="section-title">Noticias de la red</div>
+            <div class="section-subtitle">Medidas, sensores y salud pública</div>
+            <div class="news" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="footer">
+            <div class="text-muted">Inspirado en WAQI · Datos de referencia locales</div>
+            <div class="links">
+              <a href="https://waqi.info" target="_blank" rel="noreferrer">WAQI</a>
+              <a href="https://datos.gob.pe" target="_blank" rel="noreferrer">Datos Perú</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="drawer" tabindex="0">
+      <header>
+        <div>
+          <div class="drawer-title">Detalle de estación</div>
+          <div class="drawer-meta text-muted">--</div>
+        </div>
+        <button class="drawer-close" aria-label="Cerrar" style="background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;cursor:pointer;">Cerrar</button>
+      </header>
+      <div class="body">
+        <div class="chips" style="margin-bottom:10px;"></div>
+        <table>
+          <tbody></tbody>
+        </table>
+        <div class="separator"></div>
+        <div class="text-muted" style="line-height:1.5;">
+          Las recomendaciones y fuentes se basan en perfiles de cada distrito: tráfico, industria, salinidad costera y altura.
+          Ajusta horarios y rutas según el nivel AQI mostrado.
         </div>
       </div>
     </div>
-    <div class="badge" id="stations-count">0 estaciones</div>
-  </header>
-
-  <div class="layout">
-    <aside>
-      <input id="search" class="search" type="search" placeholder="Buscar distrito o zona...">
-      <div class="chips" id="district-chips"></div>
-
-      <div class="card">
-        <div class="kpi-grid" id="kpi-grid"></div>
-      </div>
-
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <div style="font-weight:700;">Estaciones monitoreadas</div>
-          <div style="color:var(--muted);font-size:12px;" id="filter-label">Todas</div>
-        </div>
-        <div class="station-list" id="station-list"></div>
-      </div>
-
-      <div class="card" id="departments-card">
-        <div style="font-weight:700;margin-bottom:6px;">Cobertura nacional</div>
-        <div id="departments-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-      </div>
-    </aside>
-
-    <main>
-      <div id="map"></div>
-      <div class="legend">
-        <div class="legend-row"><span class="dot" style="background:#22c55e"></span> Buena (0-50)</div>
-        <div class="legend-row"><span class="dot" style="background:#eab308"></span> Moderado (51-100)</div>
-        <div class="legend-row"><span class="dot" style="background:#fb923c"></span> Grupos sensibles (101-150)</div>
-        <div class="legend-row"><span class="dot" style="background:#ef4444"></span> Dañino (150+)</div>
-      </div>
-      <div class="drawer" id="drawer" hidden>
-        <h3 id="drawer-title">Selecciona una estación</h3>
-        <div style="margin-bottom:6px; color:var(--muted);" id="drawer-subtitle"></div>
-        <div style="margin-bottom:10px;" id="drawer-pill"></div>
-        <div class="metrics" id="drawer-metrics"></div>
-        <div style="margin:10px 0 6px 0; font-weight:700;">Fuentes y recomendaciones</div>
-        <div class="sources" id="drawer-sources"></div>
-      </div>
-    </main>
   </div>
 
-  <footer>
-    Datos simulados para demostración en Lima y Callao. Valores basados en perfiles típicos urbanos/industriales (PM2.5, PM10, NO₂, SO₂, O₃, CO) y clasificados con rangos similares a WAQI. Última actualización local dinámica.
-  </footer>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-o9N1j7kGStqJnTNpMRKYLGbV9sP0H3Q8NfpQwlZVCI96WkI7S5Gqjv0LN1pW6H0bqGUMGaGL3w8nM8y9Nhp3g==" crossorigin=""></script>
-  <script>
-    const state = {
-      data: null,
-      map: null,
-      markers: [],
-      activeDistrict: 'Todas',
-      filtered: []
-    };
-
-    const badgeClass = (aqi) => {
-      if (aqi <= 50) return 'good';
-      if (aqi <= 100) return 'moderate';
-      if (aqi <= 150) return 'sensitive';
-      return 'unhealthy';
-    };
-
-    const formatDate = () => {
-      const now = new Date();
-      return new Intl.DateTimeFormat('es-PE', {
-        dateStyle: 'full', timeStyle: 'medium'
-      }).format(now);
-    };
-
-    const renderTimestamp = () => {
-      document.getElementById('timestamp').textContent = `Actualizado: ${formatDate()}`;
-    };
-
-    const renderDepartments = (departments) => {
-      const container = document.getElementById('departments-list');
-      container.innerHTML = '';
-      departments.forEach(dep => {
-        const span = document.createElement('span');
-        span.className = 'tag';
-        span.textContent = `${dep.name}: ${dep.coverage} (${dep.stations} estaciones)`;
-        container.appendChild(span);
-      });
-      document.getElementById('departments-badge').textContent = `${departments.length} departamentos activos`;
-    };
-
-    const computeKpis = (stations) => {
-      const pm25 = (stations.reduce((s, p) => s + p.pm25, 0) / stations.length).toFixed(1);
-      const pm10 = (stations.reduce((s, p) => s + p.pm10, 0) / stations.length).toFixed(1);
-      const worst = stations.reduce((max, s) => s.aqi > max.aqi ? s : max, stations[0]);
-      return [
-        { label: 'Prom. PM2.5 (µg/m³)', value: pm25 },
-        { label: 'Prom. PM10 (µg/m³)', value: pm10 },
-        { label: 'Pico AQI', value: `${worst.aqi} (${worst.district})` },
-        { label: 'Estaciones activas', value: stations.length }
-      ];
-    };
-
-    const renderKpis = (stations) => {
-      const kpiGrid = document.getElementById('kpi-grid');
-      kpiGrid.innerHTML = '';
-      computeKpis(stations).forEach(kpi => {
-        const div = document.createElement('div');
-        div.className = 'kpi';
-        div.innerHTML = `<div class="label">${kpi.label}</div><div class="value">${kpi.value}</div>`;
-        kpiGrid.appendChild(div);
-      });
-    };
-
-    const renderChips = (stations) => {
-      const uniqueDistricts = Array.from(new Set(stations.map(s => s.district))).sort();
-      const container = document.getElementById('district-chips');
-      container.innerHTML = '';
-      const all = document.createElement('div');
-      all.className = 'chip active';
-      all.textContent = 'Todas';
-      all.onclick = () => setDistrict('Todas');
-      container.appendChild(all);
-      uniqueDistricts.forEach(d => {
-        const chip = document.createElement('div');
-        chip.className = 'chip';
-        chip.textContent = d;
-        chip.onclick = () => setDistrict(d);
-        container.appendChild(chip);
-      });
-    };
-
-    const renderStations = (stations) => {
-      const list = document.getElementById('station-list');
-      list.innerHTML = '';
-      stations.forEach(st => {
-        const card = document.createElement('div');
-        card.className = 'station';
-        card.dataset.id = st.id;
-        card.innerHTML = `
-          <div class="top">
-            <div>
-              <div class="title">${st.district} · ${st.zone}</div>
-              <div class="subtitle">AQI ${st.aqi} · PM2.5 ${st.pm25} · PM10 ${st.pm10}</div>
-            </div>
-            <div class="pill ${badgeClass(st.aqi)}">${st.category}</div>
-          </div>
-          <div class="subtitle">Fuentes: ${st.sources}</div>
-        `;
-        card.onclick = () => focusStation(st.id);
-        list.appendChild(card);
-      });
-      document.getElementById('stations-count').textContent = `${stations.length} estaciones`;
-    };
-
-    const setDistrict = (district) => {
-      state.activeDistrict = district;
-      document.querySelectorAll('.chip').forEach(ch => {
-        ch.classList.toggle('active', ch.textContent === district);
-      });
-      filterStations();
-    };
-
-    const filterStations = () => {
-      const term = document.getElementById('search').value.toLowerCase();
-      const filtered = state.data.stations.filter(st => {
-        const matchesDistrict = state.activeDistrict === 'Todas' || st.district === state.activeDistrict;
-        const matchesTerm = `${st.district} ${st.zone}`.toLowerCase().includes(term);
-        return matchesDistrict && matchesTerm;
-      });
-      state.filtered = filtered;
-      document.getElementById('filter-label').textContent = state.activeDistrict;
-      renderStations(filtered);
-      renderKpis(filtered.length ? filtered : state.data.stations);
-      syncMarkers();
-    };
-
-    const initMap = () => {
-      state.map = L.map('map').setView([-12.05, -77.04], 11);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(state.map);
-    };
-
-    const syncMarkers = () => {
-      state.markers.forEach(m => state.map.removeLayer(m));
-      state.markers = [];
-      const active = state.filtered.length ? state.filtered : state.data.stations;
-      active.forEach(st => {
-        const marker = L.circleMarker([st.lat, st.lon], {
-          radius: 8,
-          weight: 2,
-          color: '#0ea5e9',
-          fillColor: { good:'#22c55e', moderate:'#eab308', sensitive:'#fb923c', unhealthy:'#ef4444' }[badgeClass(st.aqi)],
-          fillOpacity: 0.9
-        }).addTo(state.map);
-        marker.bindPopup(`<b>${st.district}</b><br>${st.zone}<br>AQI ${st.aqi} (${st.category})`);
-        marker.on('click', () => focusStation(st.id, true));
-        state.markers.push(marker);
-      });
-    };
-
-    const focusStation = (id, fromMap = false) => {
-      const st = state.data.stations.find(s => s.id === id);
-      if (!st) return;
-      const pill = `<span class="pill ${badgeClass(st.aqi)}">AQI ${st.aqi} · ${st.category}</span>`;
-      document.getElementById('drawer').hidden = false;
-      document.getElementById('drawer-title').textContent = `${st.district} – ${st.zone}`;
-      document.getElementById('drawer-subtitle').textContent = `${st.department} · Lat ${st.lat.toFixed(4)}, Lon ${st.lon.toFixed(4)}`;
-      document.getElementById('drawer-pill').innerHTML = pill;
-      document.getElementById('drawer-sources').textContent = `${st.sources}. Recomendación: ${st.advice}.`;
-      const metrics = [
-        { label: 'PM2.5 (µg/m³)', value: st.pm25 },
-        { label: 'PM10 (µg/m³)', value: st.pm10 },
-        { label: 'NO₂ (ppb)', value: st.no2 },
-        { label: 'SO₂ (ppb)', value: st.so2 },
-        { label: 'O₃ (ppb)', value: st.o3 },
-        { label: 'CO (ppm)', value: st.co }
-      ];
-      const metricsDiv = document.getElementById('drawer-metrics');
-      metricsDiv.innerHTML = '';
-      metrics.forEach(m => {
-        const div = document.createElement('div');
-        div.className = 'metric';
-        div.innerHTML = `<div class="label">${m.label}</div><div class="value">${m.value}</div>`;
-        metricsDiv.appendChild(div);
-      });
-      if (!fromMap) {
-        state.map.setView([st.lat, st.lon], 13);
-        const card = document.querySelector(`[data-id="${id}"]`);
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    };
-
-    const loadData = async () => {
-      const res = await fetch('data/air_quality.json');
-      const data = await res.json();
-      state.data = data;
-      state.filtered = data.stations;
-      renderTimestamp();
-      renderDepartments(data.departments);
-      renderChips(data.stations);
-      renderStations(data.stations);
-      renderKpis(data.stations);
-      initMap();
-      syncMarkers();
-    };
-
-    document.getElementById('search').addEventListener('input', filterStations);
-
-    loadData();
-  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>

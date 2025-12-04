@@ -1,0 +1,19 @@
+.alerts {
+  display: grid;
+  gap: 8px;
+}
+
+.alert-card {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+
+.alert-card .meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}

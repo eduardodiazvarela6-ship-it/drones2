@@ -1,28 +1,27 @@
-# EcoDrones Lima & Callao
+# Perú AirWatch – Lima/Callao
 
-Panel estilo WAQI para monitorear calidad de aire simulada en Lima, Callao y cobertura nacional de referencia.
+Dashboard estático inspirado en WAQI para monitoreo de calidad de aire centrado en Lima y Callao, con referencias nacionales en 10 departamentos. Incluye mapa Leaflet, filtros por riesgo/territorio, KPIs, rankings, alertas y noticias.
 
-## Características
-- **Mapa interactivo Leaflet** con marcadores por estación y leyenda de colores AQI.
-- **25+ estaciones** en distritos de Lima/Callao y provincias cercanas con PM2.5, PM10, NO₂, SO₂, O₃ y CO.
-- **Filtro y búsqueda** por distrito/zona con tarjetas sincronizadas con el mapa y panel lateral.
-- **KPIs rápidos** (promedios PM, pico AQI y conteo de estaciones).
-- **Drawer de detalle** con ubicación, fuentes de emisión y recomendaciones instantáneas.
-- **Cobertura nacional**: 10 departamentos resumidos como referencia para expansión.
-- **Fecha/hora dinámica local** (es-PE) en la cabecera.
+## Requisitos
+- Node.js 18+
+- Acceso local a navegador (sirve como sitio estático)
 
-## Ejecutar localmente
+## Uso rápido
 ```bash
 npm install
-npm start
+npm run start # sirve la carpeta web
 ```
-Luego abre `http://localhost:3000` (por defecto `serve` usa ese puerto) y verás el dashboard en `web/`.
+Visita `http://localhost:3000` (o el puerto que indique `serve`).
 
 ## Estructura
-- `web/index.html`: SPA estática con Leaflet y estilos.
-- `web/data/air_quality.json`: dataset simulados de estaciones y departamentos.
-- `package.json`: script para servir la carpeta `web`.
+- `web/index.html`: layout principal estilo WAQI.
+- `web/css/`: estilos modulares (base, layout, mapa, tarjetas, drawer, rankings, timeline, alertas, pie).
+- `web/js/`: módulos ES para mapa, filtros, drawer, KPIs, rankings, timeline (canvas), alertas, búsqueda y carga de datos.
+- `web/data/air_quality.json`: 25+ estaciones priorizadas en Lima/Callao y 10 departamentos.
+- `web/data/*.json`: departamentos, alertas, noticias, tendencias horarias y rankings.
 
-## Notas
-- Los valores son simulados con rangos realistas inspirados en perfiles urbanos/industriales de Lima y Callao.
-- Se pensó para usarse offline/edge; basta un servidor estático para desplegar (GitHub Pages, Vercel, Nginx).
+## Notas de diseño
+- Los datos son estáticos y simulados; se pueden reemplazar por una API real manteniendo la forma del JSON.
+- El mapa usa OpenStreetMap + Leaflet y centra en Lima con opción de geolocalización del usuario.
+- El drawer muestra panel detallado por estación con contaminantes criterio y metereología.
+- Inspiración visual WAQI: esquema oscuro, chips de filtros, leyenda AQI y rankings laterales.
