@@ -13,5 +13,6 @@ export async function loadData() {
     loadJSON("./data/trends.json"),
     loadJSON("./data/leaderboard.json")
   ]);
+
   return { stations, departments, alerts, news, trends, leaderboard };
 }
