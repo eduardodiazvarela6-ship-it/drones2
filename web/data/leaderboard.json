@@ -1,0 +1,16 @@
+[
+  {"titulo": "Top distritos críticos", "items": [
+    {"nombre": "Callao - Puerto", "aqi": 187},
+    {"nombre": "Villa El Salvador Industrial", "aqi": 181},
+    {"nombre": "San Juan de Lurigancho - Canto Grande", "aqi": 174},
+    {"nombre": "Puente Piedra Centro", "aqi": 169},
+    {"nombre": "Los Olivos - Panamericana Norte", "aqi": 165}
+  ]},
+  {"titulo": "Distritos costeros con mejor aire", "items": [
+    {"nombre": "Miraflores - Malecón", "aqi": 71},
+    {"nombre": "Barranco - Bajada", "aqi": 88},
+    {"nombre": "Huarmey Costero", "aqi": 82},
+    {"nombre": "San Isidro Financiero", "aqi": 94},
+    {"nombre": "Cusco Histórico", "aqi": 90}
+  ]}
+]

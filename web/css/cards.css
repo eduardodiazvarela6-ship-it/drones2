@@ -1,0 +1,40 @@
+.station-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 4px 0 10px;
+}
+
+.station-card {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.station-card:hover { border-color: var(--accent); }
+
+.station-card .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.station-card .aqi {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.station-card .meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.station-card .chips { display: flex; gap: 6px; flex-wrap: wrap; }
