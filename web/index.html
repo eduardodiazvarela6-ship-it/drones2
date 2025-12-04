@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoDrones Lima – Dashboard distrital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1j7kGEXG1GkMQ29Y+O2J1yFtsv3HkRbqu+0pN0wY=" crossorigin="">
+  <style>
+    :root {
+      --fondo: #0d1b2a;
+      --tarjeta: #12263a;
+      --acento: #00e0b3;
+      --texto: #e4eef5;
+      --texto-sec: #9fb3c8;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--fondo); color: var(--texto); margin: 0; }
+    header { padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top:0; backdrop-filter: blur(6px); }
+    h1 { margin: 0; font-size: 22px; letter-spacing: 0.3px; }
+    .layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; padding: 16px; }
+    .card { background: var(--tarjeta); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+    #map { width: 100%; height: 520px; border-radius: 10px; }
+    .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px; }
+    select, input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: var(--texto); }
+    option { color: #0d1b2a; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .estado-BUENO { background: rgba(0,224,179,0.18); color: #34f5c5; }
+    .estado-MODERADO { background: rgba(255,222,89,0.18); color: #ffe15a; }
+    .estado-ALTO { background: rgba(255,153,51,0.18); color: #ffb347; }
+    .estado-PELIGRO, .estado-CRITICO { background: rgba(255,87,87,0.2); color: #ff7b7b; }
+    .zona-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .zona { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.02); transition: transform 0.2s ease, border 0.2s ease; }
+    .zona:hover { transform: translateY(-2px); border-color: var(--acento); }
+    .zona img { width: 100%; height: 150px; object-fit: cover; }
+    .zona-body { padding: 10px 12px 14px; }
+    .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin: 8px 0 4px; }
+    .metric { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 8px; font-size: 12px; color: var(--texto-sec); }
+    .metric strong { color: var(--texto); }
+    footer { padding: 12px 16px; font-size: 12px; color: var(--texto-sec); text-align: center; }
+    @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } #map { height: 360px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>EcoDrones Lima – Mapa de riesgo por distrito</h1>
+      <div style="color: var(--texto-sec); font-size: 13px;">Importa el flujo de Node-RED y centraliza los datos en esta vista pública.</div>
+    </div>
+    <div class="pill estado-MODERADO">β Demo</div>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <div class="controls">
+        <select id="distritoSelect">
+          <option value="">Filtrar por distrito</option>
+        </select>
+        <input id="buscador" type="search" placeholder="Buscar por zona o fuente (ej. Backus, puerto, parque)...">
+      </div>
+      <div id="map"></div>
+    </section>
+    <section class="card">
+      <h2 style="margin: 0 0 8px;">Resumen de zonas monitoreadas</h2>
+      <div style="font-size: 13px; color: var(--texto-sec); margin-bottom: 8px;">Selecciona un distrito para centrar el mapa o usa el buscador para filtrar. Cada tarjeta muestra contaminantes en tiempo simulado (pm2.5, pm10, CO₂, CO).</div>
+      <div class="zona-list" id="zonaList"></div>
+    </section>
+  </main>
+
+  <footer>
+    Incluye el flujo exportado de Node-RED en <code>web/data/nodered_flow.json</code> y agrega más distritos editando <code>web/data/zonas.json</code>.
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j7kGEXG1GkMQ29Y+O2J1yFtsv3HkRbqu+0pN0wY=" crossorigin=""></script>
+  <script>
+    const mapa = L.map('map').setView([-12.0464, -77.0428], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(mapa);
+
+    const zonaListEl = document.getElementById('zonaList');
+    const distritoSelect = document.getElementById('distritoSelect');
+    const buscador = document.getElementById('buscador');
+    let zonas = [];
+    let markers = [];
+
+    const estadoClase = (estado) => `pill estado-${estado}`;
+
+    const renderLista = (filtroTexto = '', filtroDistrito = '') => {
+      zonaListEl.innerHTML = '';
+      const texto = filtroTexto.trim().toLowerCase();
+      const filtradas = zonas.filter(z => {
+        const coincideTexto = !texto || `${z.zona} ${z.fuentes}`.toLowerCase().includes(texto);
+        const coincideDistrito = !filtroDistrito || z.distrito === filtroDistrito;
+        return coincideTexto && coincideDistrito;
+      });
+      filtradas.forEach(z => {
+        const card = document.createElement('article');
+        card.className = 'zona';
+        card.innerHTML = `
+          <img src="${z.imagenes?.zona || 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60'}" alt="${z.zona}">
+          <div class="zona-body">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <div>
+                <div style="font-size:12px;color:var(--texto-sec);">${z.distrito}</div>
+                <div style="font-weight:700;">${z.zona}</div>
+              </div>
+              <span class="${estadoClase(z.estado)}">${z.estado}</span>
+            </div>
+            <div style="font-size:13px;color:var(--texto-sec); margin-top:4px;">${z.descripcion}</div>
+            <div class="metrics">
+              <div class="metric"><strong>${z.pm25}</strong> µg/m³<br>PM2.5</div>
+              <div class="metric"><strong>${z.pm10}</strong> µg/m³<br>PM10</div>
+              <div class="metric"><strong>${z.co2}</strong> ppm<br>CO₂</div>
+              <div class="metric"><strong>${z.co}</strong> ppm<br>CO</div>
+            </div>
+            <div style="font-size:12px;color:var(--texto-sec);">Fuentes: ${z.fuentes}</div>
+            <div style="font-size:12px;color:#7ee0c8; margin-top:4px;">Recomendación: ${z.recomendacion}</div>
+          </div>`;
+        card.addEventListener('click', () => {
+          mapa.setView([z.lat, z.lon], 13);
+          const marker = markers.find(m => m.options.id === z.id);
+          marker?.openPopup();
+        });
+        zonaListEl.appendChild(card);
+      });
+    };
+
+    fetch('./data/zonas.json')
+      .then(res => res.json())
+      .then(data => {
+        zonas = data;
+        const distritos = [...new Set(zonas.map(z => z.distrito))].sort();
+        distritos.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d; opt.textContent = d; distritoSelect.appendChild(opt);
+        });
+
+        markers = zonas.map(z => {
+          const marcador = L.circleMarker([z.lat, z.lon], {
+            id: z.id,
+            radius: 8,
+            color: '#00e0b3',
+            fillColor: '#00e0b3',
+            fillOpacity: 0.6
+          }).addTo(mapa);
+          marcador.bindPopup(`<strong>${z.zona}</strong><br>${z.distrito}<br>Estado: ${z.estado}`);
+          marcador.on('click', () => {
+            const card = Array.from(document.querySelectorAll('.zona')).find(c => c.querySelector('div strong')?.textContent === z.zona);
+            card?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          return marcador;
+        });
+        renderLista();
+      })
+      .catch(err => {
+        console.error('Error cargando zonas.json', err);
+        zonaListEl.innerHTML = '<p>No se pudieron cargar las zonas. Revisa el archivo data/zonas.json</p>';
+      });
+
+    distritoSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val) {
+        const z = zonas.find(zo => zo.distrito === val);
+        if (z) mapa.setView([z.lat, z.lon], 12);
+      }
+      renderLista(buscador.value, val);
+    });
+
+    buscador.addEventListener('input', (e) => {
+      renderLista(e.target.value, distritoSelect.value);
+    });
+  </script>
+</body>
+</html>
