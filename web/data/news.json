@@ -1,0 +1,23 @@
+[
+  {
+    "id": "nota-vehicular",
+    "titulo": "Lima inicia plan de renovación de buses Euro VI",
+    "descripcion": "La ATU y el MTC anunciaron incentivos para reemplazar 500 buses antiguos por unidades Euro VI y eléctricas en corredores complementarios.",
+    "fuente": "ATU / MTC",
+    "fecha": "2025-05-29"
+  },
+  {
+    "id": "nota-sensores",
+    "titulo": "Municipalidades reciben 120 microestaciones de calidad de aire",
+    "descripcion": "El Ministerio del Ambiente entregó sensores portátiles para integrar en la red nacional y subir datos abiertos horarios.",
+    "fuente": "MINAM",
+    "fecha": "2025-05-28"
+  },
+  {
+    "id": "nota-salud",
+    "titulo": "Clínicas reportan 12% menos emergencias respiratorias en semana sin quemas",
+    "descripcion": "Hospitales de Lima Este registraron reducción de consultas tras operativos contra quema de basura en la ribera del Rímac.",
+    "fuente": "DIGESA",
+    "fecha": "2025-05-27"
+  }
+]

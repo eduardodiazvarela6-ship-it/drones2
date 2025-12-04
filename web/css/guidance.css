@@ -1,0 +1,70 @@
+:root {
+  --badge-blue: #dbeafe;
+  --badge-blue-text: #1d4ed8;
+  --badge-green: #dcfce7;
+  --badge-green-text: #15803d;
+  --badge-amber: #fef9c3;
+  --badge-amber-text: #92400e;
+  --badge-red: #fee2e2;
+  --badge-red-text: #991b1b;
+}
+
+.coverage-grid,
+.guidance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.coverage-card,
+.guidance-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.coverage-card .title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.coverage-card .meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.coverage-card .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.guidance-card .title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.guidance-card ul {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.guidance-card .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}

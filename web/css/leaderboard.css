@@ -1,0 +1,25 @@
+.leaderboard {
+  display: grid;
+  gap: 10px;
+}
+
+.board-card {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.board-card h4 { margin: 0 0 8px; }
+
+.board-card ul { list-style: none; margin: 0; padding: 0; }
+
+.board-card li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.board-card li:last-child { border-bottom: none; }

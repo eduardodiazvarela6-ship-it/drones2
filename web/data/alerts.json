@@ -1,0 +1,26 @@
+[
+  {
+    "id": "alerta-maritime",
+    "titulo": "Oleaje y aerosoles marinos en litoral central",
+    "mensaje": "Incremento de partículas salinas por oleaje moderado. Vigilar corrosión de equipos y humectar zonas portuarias.",
+    "tipo": "Preventivo",
+    "departamento": "Callao",
+    "vigente_hasta": "2025-05-30T18:00:00-05:00"
+  },
+  {
+    "id": "alerta-industrial-ves",
+    "titulo": "Emisiones industriales VES - Lurín",
+    "mensaje": "Se registran picos de PM10 y SO2 en el parque industrial. Coordinar fiscalización y filtros en hornos.",
+    "tipo": "Crítico",
+    "departamento": "Lima",
+    "vigente_hasta": "2025-05-30T06:00:00-05:00"
+  },
+  {
+    "id": "alerta-polvo-norte",
+    "titulo": "Polvo en suspensión en corredores norte",
+    "mensaje": "Obras en Panamericana Norte generan aumento de PM10. Se sugiere humectar vías y desviar camiones.",
+    "tipo": "Informativo",
+    "departamento": "Lima",
+    "vigente_hasta": "2025-05-29T23:59:59-05:00"
+  }
+]
