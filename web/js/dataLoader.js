@@ -5,15 +5,29 @@ export async function loadJSON(path) {
 }
 
 export async function loadData() {
-  const [stations, departments, alerts, news, trends, leaderboard, guidance, factories] = await Promise.all([
+  // Carga únicamente los archivos que realmente usa tu proyecto actual
+  const [
+    stations,
+    departments,
+    alerts,
+    news,
+    trends,
+    leaderboard
+  ] = await Promise.all([
     loadJSON("./data/air_quality.json"),
     loadJSON("./data/departments.json"),
     loadJSON("./data/alerts.json"),
     loadJSON("./data/news.json"),
     loadJSON("./data/trends.json"),
-    loadJSON("./data/leaderboard.json"),
-    loadJSON("./data/guidance.json"),
-    loadJSON("./data/factories.json")
+    loadJSON("./data/leaderboard.json")
   ]);
-  return { stations, departments, alerts, news, trends, leaderboard, guidance, factories };
+
+  return {
+    stations,
+    departments,
+    alerts,
+    news,
+    trends,
+    leaderboard
+  };
 }

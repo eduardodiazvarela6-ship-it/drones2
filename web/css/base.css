@@ -1,11 +1,11 @@
 :root {
-  --bg: #0b0f16;
-  --panel: #0f1622;
-  --panel-soft: #131c29;
+  --bg: #0d1117;
+  --panel: #111827;
+  --panel-soft: #141c2b;
   --text: #e5e7eb;
   --muted: #9ca3af;
-  --accent: #7dd3fc;
-  --accent-2: #5eead4;
+  --accent: #4ade80;      /* verde */
+  --accent-2: #22d3ee;    /* celeste */
   --warn: #facc15;
   --danger: #f87171;
   --good: #34d399;
@@ -21,6 +21,7 @@
   --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* Reset básico */
 * {
   box-sizing: border-box;
 }
@@ -28,7 +29,9 @@
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg);
+  background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.05), transparent 20%),
+              radial-gradient(circle at 80% 0%, rgba(74, 222, 128, 0.05), transparent 22%),
+              var(--bg);
   color: var(--text);
   min-height: 100vh;
 }
@@ -40,9 +43,9 @@ button, input, select {
 }
 
 a { color: inherit; }
-
 a:hover { color: var(--accent); }
 
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -55,6 +58,7 @@ a:hover { color: var(--accent); }
   font-size: 12px;
 }
 
+/* Tags / chips */
 .tag {
   padding: 4px 8px;
   border-radius: 999px;
@@ -74,6 +78,7 @@ a:hover { color: var(--accent); }
   font-weight: 600;
 }
 
+/* Layout utilitario */
 .grid {
   display: grid;
   gap: 16px;
@@ -119,13 +124,14 @@ a:hover { color: var(--accent); }
   margin: 12px 0;
 }
 
+/* KPIs */
 .kpi {
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 14px;
   border-radius: var(--radius);
-  background: var(--panel-soft);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(74, 222, 128, 0.08));
   border: 1px solid var(--border);
 }
 
@@ -133,6 +139,7 @@ a:hover { color: var(--accent); }
 .kpi .value { font-size: 24px; font-weight: 800; }
 .kpi .meta { color: var(--muted); font-size: 12px; }
 
+/* Dots de estado */
 .status-dot {
   width: 10px;
   height: 10px;
@@ -145,15 +152,12 @@ a:hover { color: var(--accent); }
 .status-warn { background: var(--warn); }
 .status-good { background: var(--good); }
 
+/* Scroll custom */
 .scroll-y { overflow-y: auto; }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 999px;
 }
-
 ::-webkit-scrollbar-track { background: transparent; }
