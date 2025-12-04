@@ -1,6 +1,6 @@
-# EcoDrones Lima
+# Perú AirWatch – Lima/Callao
 
-Dashboard estático para visualizar zonas de riesgo de calidad de aire monitoreadas por drones en Lima Metropolitana.
+Dashboard estático inspirado en WAQI para monitoreo de calidad de aire centrado en Lima y Callao, con cobertura nacional. Incluye mapa Leaflet, filtros por riesgo y territorio, KPIs, rankings, alertas, noticias y una línea de tiempo horaria.
 
 ## Requisitos
 
@@ -11,4 +11,4 @@ Dashboard estático para visualizar zonas de riesgo de calidad de aire monitorea
 
 ```bash
 npm install
-npm start
+npm run start   # sirve la carpeta web

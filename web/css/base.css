@@ -4,8 +4,8 @@
   --panel-soft: #141c2b;
   --text: #e5e7eb;
   --muted: #9ca3af;
-  --accent: #4ade80;
-  --accent-2: #22d3ee;
+  --accent: #4ade80;      /* verde */
+  --accent-2: #22d3ee;    /* celeste */
   --warn: #facc15;
   --danger: #f87171;
   --good: #34d399;
@@ -21,6 +21,7 @@
   --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* Reset básico */
 * {
   box-sizing: border-box;
 }
@@ -42,9 +43,9 @@ button, input, select {
 }
 
 a { color: inherit; }
-
 a:hover { color: var(--accent); }
 
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -57,6 +58,7 @@ a:hover { color: var(--accent); }
   font-size: 12px;
 }
 
+/* Tags / chips */
 .tag {
   padding: 4px 8px;
   border-radius: 999px;
@@ -76,6 +78,7 @@ a:hover { color: var(--accent); }
   font-weight: 600;
 }
 
+/* Layout utilitario */
 .grid {
   display: grid;
   gap: 16px;
@@ -121,6 +124,7 @@ a:hover { color: var(--accent); }
   margin: 12px 0;
 }
 
+/* KPIs */
 .kpi {
   display: flex;
   flex-direction: column;
@@ -135,6 +139,7 @@ a:hover { color: var(--accent); }
 .kpi .value { font-size: 24px; font-weight: 800; }
 .kpi .meta { color: var(--muted); font-size: 12px; }
 
+/* Dots de estado */
 .status-dot {
   width: 10px;
   height: 10px;
@@ -147,15 +152,12 @@ a:hover { color: var(--accent); }
 .status-warn { background: var(--warn); }
 .status-good { background: var(--good); }
 
+/* Scroll custom */
 .scroll-y { overflow-y: auto; }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 999px;
 }
-
 ::-webkit-scrollbar-track { background: transparent; }

@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perú AirWatch – Lima y Callao</title>
 
-  <!-- Fuentes y estilos -->
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
+  <!-- Estilos -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="./css/base.css" />
   <link rel="stylesheet" href="./css/typography.css" />
@@ -21,12 +22,12 @@
   <link rel="stylesheet" href="./css/timeline.css" />
   <link rel="stylesheet" href="./css/alerts.css" />
   <link rel="stylesheet" href="./css/footer.css" />
-
 </head>
+
 <body>
   <div class="app">
 
-    <!-- ENCABEZADO -->
+    <!-- HEADER -->
     <header class="header">
       <div>
         <div class="title">Perú AirWatch</div>
@@ -40,7 +41,7 @@
       </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- MAIN LAYOUT -->
     <main class="main">
 
       <!-- MAPA -->
@@ -60,9 +61,8 @@
         </div>
       </section>
 
-      <!-- PANEL LATERAL -->
+      <!-- SIDEBAR -->
       <aside class="sidebar">
-
         <div class="hero">
           <div>
             <div class="section-title">Monitor nacional</div>
@@ -100,7 +100,7 @@
             </div>
           </div>
 
-          <!-- BARRA DE BÚSQUEDA -->
+          <!-- SEARCH -->
           <div class="search" style="margin:14px 0 6px;">
             <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="7"></circle>
@@ -109,7 +109,7 @@
             <input id="search" type="search" placeholder="Buscar distrito o zona de Lima" />
           </div>
 
-          <!-- FILTROS -->
+          <!-- FILTERS -->
           <div class="filters">
             <div class="chip active" data-filter="all">Todas</div>
             <div class="chip" data-filter="departamento" data-value="Lima">Lima</div>
@@ -129,6 +129,8 @@
                 <div class="card-title">Tendencia horaria Lima/Callao</div>
                 <div class="card-subtitle">PM2.5, PM10 y CO₂ escalados</div>
               </div>
+
+              <!-- ETIQUETA FIJA -->
               <span class="tag">Últ. 14 horas</span>
             </div>
 
@@ -166,8 +168,8 @@
           <div class="footer">
             <div class="text-muted">Inspirado en WAQI · Datos de referencia</div>
             <div class="links">
-              <a href="https://waqi.info" target="_blank" rel="noreferrer">WAQI</a>
-              <a href="https://datos.gob.pe" target="_blank" rel="noreferrer">Datos Perú</a>
+              <a href="https://waqi.info" target="_blank">WAQI</a>
+              <a href="https://datos.gob.pe" target="_blank">Datos Perú</a>
             </div>
           </div>
 
@@ -175,7 +177,7 @@
       </aside>
     </main>
 
-    <!-- PANEL DE DETALLE -->
+    <!-- DRAWER -->
     <div class="drawer" tabindex="0">
       <header>
         <div>

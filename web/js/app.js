@@ -20,14 +20,14 @@ let stations = [];
   const data = await loadData();
   stations = data.stations;
 
-  // Renderizar bloques principales
+  // Renderizado global
   renderKpis(stations, data.departments);
   renderLeaderboard(data.leaderboard);
   renderTimeline(data.trends);
   renderAlerts(data.alerts);
   renderNews(data.news);
 
-  // Pintar estaciones en mapa y listado
+  // Pintar estaciones en mapa + lista
   drawStations(stations);
 
   // Filtros y búsqueda
@@ -36,16 +36,12 @@ let stations = [];
 
   // Botones de mapa
   const btnGeo = document.querySelector("#btn-geo");
-  if (btnGeo) {
-    btnGeo.addEventListener("click", locateUser);
-  }
+  if (btnGeo) btnGeo.addEventListener("click", locateUser);
 
   const btnReset = document.querySelector("#btn-reset");
-  if (btnReset) {
-    btnReset.addEventListener("click", () => handleFilter(stations));
-  }
+  if (btnReset) btnReset.addEventListener("click", () => handleFilter(stations));
 
-  // Marcar última actualización (una sola vez)
+  // Registrar última actualización
   const lastUpdatedEl = document.querySelector("#last-updated");
   if (lastUpdatedEl) {
     lastUpdatedEl.textContent = new Date().toLocaleString("es-PE", {
@@ -55,32 +51,33 @@ let stations = [];
   }
 })();
 
-/**
- * Dibuja estaciones en mapa y lista
- */
+
+/* ---------------------------------------------------------
+   Dibuja en mapa + lista
+--------------------------------------------------------- */
 function drawStations(list) {
   plotStations(list, handleSelect);
   fitToStations(list);
   renderStationList(list);
 }
 
-/**
- * Callback usado por filtros y búsqueda
- */
+/* ---------------------------------------------------------
+   Filtros
+--------------------------------------------------------- */
 function handleFilter(list) {
   drawStations(list);
 }
 
-/**
- * Al hacer clic en una estación (lista o marcador)
- */
+/* ---------------------------------------------------------
+   Selección de estación
+--------------------------------------------------------- */
 function handleSelect(station) {
   openDrawer(station);
 }
 
-/**
- * Renderiza la lista lateral de estaciones
- */
+/* ---------------------------------------------------------
+   Lista lateral
+--------------------------------------------------------- */
 function renderStationList(list) {
   const container = document.querySelector(".station-list");
   if (!container) return;
@@ -97,11 +94,13 @@ function renderStationList(list) {
             </div>
             <div class="aqi" style="color:${risk.color}">${st.aqi}</div>
           </div>
+
           <div class="meta">
             PM2.5 ${st.pm25} µg/m³ ·
             PM10 ${st.pm10} µg/m³ ·
             CO₂ ${st.co2} ppm
           </div>
+
           <div class="chips">
             <span class="tag">${risk.label}</span>
             <span class="tag">Estado ${st.estado}</span>
@@ -118,6 +117,7 @@ function renderStationList(list) {
     })
     .join("");
 
+  // Click en cada tarjeta → abrir drawer
   container.querySelectorAll(".station-card").forEach((card) => {
     card.addEventListener("click", () => {
       const station = stations.find((s) => s.id === card.dataset.station);

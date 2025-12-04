@@ -1,0 +1,38 @@
+[
+  {
+    "nombre": "Gloria",
+    "ciudad": "Lima",
+    "distrito": "La Victoria",
+    "tagline": "Planta láctea con certificación ISO 14001 y monitoreo horario de chimeneas.",
+    "programa": "Sello Verde MTC",
+    "aporte": "Patrocinio 6 sensores PM",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/87/Gloria_Logo.png"
+  },
+  {
+    "nombre": "Interbank",
+    "ciudad": "Lima",
+    "distrito": "San Isidro",
+    "tagline": "Campus corporativo con energía renovable y flota eléctrica para courier.",
+    "programa": "Oficinas carbono neutro",
+    "aporte": "Respaldan red 5G y nube",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Logo_Interbank.png"
+  },
+  {
+    "nombre": "San Jorge",
+    "ciudad": "Callao",
+    "distrito": "Bellavista",
+    "tagline": "Planta de alimentos con filtros HEPA industriales y control de VOC.",
+    "programa": "Sello Industria Limpia",
+    "aporte": "Vehículos de respuesta",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5e/San_Jorge_logo.png"
+  },
+  {
+    "nombre": "Backus",
+    "ciudad": "Lima",
+    "distrito": "Ate",
+    "tagline": "Cervecería con calderas a gas y recuperación de calor para reducir emisiones.",
+    "programa": "Eficiencia energética",
+    "aporte": "Cobertura de estaciones móviles",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Backus_y_Johnston.png"
+  }
+]
