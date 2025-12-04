@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perú AirWatch – Lima y Callao</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/typography.css" />
+  <link rel="stylesheet" href="./css/layout.css" />
+  <link rel="stylesheet" href="./css/map.css" />
+  <link rel="stylesheet" href="./css/cards.css" />
+  <link rel="stylesheet" href="./css/drawer.css" />
+  <link rel="stylesheet" href="./css/leaderboard.css" />
+  <link rel="stylesheet" href="./css/timeline.css" />
+  <link rel="stylesheet" href="./css/alerts.css" />
+  <link rel="stylesheet" href="./css/guidance.css" />
+  <link rel="stylesheet" href="./css/footer.css" />
+  <link rel="stylesheet" href="./css/partners.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <div class="title">Perú AirWatch</div>
+        <div class="subtitle">Inspirado en WAQI · Red prioritaria Lima + Callao</div>
+      </div>
+      <div class="badges" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <span class="badge" id="coverage-badge">Cobertura nacional</span>
+        <span class="badge">Hora local Lima <span id="local-clock">--</span></span>
+        <span class="badge">Última actualización <span id="last-updated">--</span></span>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="map-shell">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <button id="btn-geo">Mi ubicación</button>
+          <button id="btn-reset">Restablecer vista</button>
+        </div>
+        <div class="legend">
+          <strong>Rango AQI</strong>
+          <span><span class="status-dot status-good"></span> 0-99 Bueno</span>
+          <span><span class="status-dot status-warn"></span> 100-149 Moderado</span>
+          <span><span class="status-dot status-danger"></span> 150+ Peligro</span>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="hero">
+          <div>
+            <div class="section-title">Monitor nacional</div>
+            <div class="meta">Datos priorizados para Lima y Callao con estaciones espejo WAQI</div>
+          </div>
+          <div class="pill">Perú · Lima 2025</div>
+        </div>
+
+        <div class="scrollable">
+          <div class="top-row">
+            <div class="kpi"><div class="label">AQI promedio</div><div class="value" id="kpi-aqi">--</div><div class="meta">Promedio ponderado distrital</div></div>
+            <div class="kpi"><div class="label">Alertas</div><div class="value" id="kpi-critical">--</div><div class="meta">PM y gases criterio</div></div>
+            <div class="kpi"><div class="label">Cobertura</div><div class="value" id="kpi-coverage">--</div><div class="meta">Puntos nacionales</div></div>
+            <div class="kpi"><div class="label">Última muestra</div><div class="value" id="kpi-updated">--</div><div class="meta">Hora local</div></div>
+          </div>
+
+          <div class="search" style="margin:14px 0 6px;">
+            <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.65" y1="16.65" x2="21" y2="21"></line></svg>
+            <input id="search" type="search" placeholder="Buscar distrito o zona de Lima" />
+          </div>
+
+          <div class="filters">
+            <div class="chip active" data-filter="all">Todas</div>
+            <div class="chip" data-filter="departamento" data-value="Lima">Lima</div>
+            <div class="chip" data-filter="departamento" data-value="Callao">Callao</div>
+            <div class="chip" data-filter="estado" data-value="peligro">Peligro</div>
+            <div class="chip" data-filter="estado" data-value="moderado">Moderado</div>
+            <div class="chip" data-filter="estado" data-value="aceptable">Aceptable</div>
+          </div>
+
+          <div class="station-list"></div>
+
+          <div class="coverage" style="margin:14px 0;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Cobertura nacional</div>
+                <div class="card-subtitle">Departamentos monitoreados y estado de riesgo</div>
+              </div>
+              <span class="tag" id="coverage-tag">-- regiones</span>
+            </div>
+            <div class="coverage-grid"></div>
+          </div>
+
+          <div class="partners" style="margin:14px 0;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Fábricas aliadas</div>
+                <div class="card-subtitle">Patrocinan sensores y operan con emisiones controladas</div>
+              </div>
+              <span class="tag">Industria limpia</span>
+            </div>
+            <div class="partners-grid"></div>
+          </div>
+
+          <div class="timeline" style="margin-top:10px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Tendencia horaria Lima/Callao</div>
+                <div class="card-subtitle">PM2.5, PM10 y CO₂ escalados</div>
+              </div>
+              <span class="tag" id="timeline-range">--</span>
+            </div>
+            <div class="chart"><canvas id="timeline-canvas"></canvas></div>
+            <div class="axis" id="timeline-axis"></div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="leaderboard"></div>
+
+          <div class="separator"></div>
+
+          <div>
+            <div class="section-title">Alertas y recomendaciones</div>
+            <div class="section-subtitle">Mensajes coordinados con salud y transporte</div>
+            <div class="alerts" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div>
+            <div class="section-title">Noticias de la red</div>
+            <div class="section-subtitle">Medidas, sensores y salud pública</div>
+            <div class="news" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="guidance">
+            <div class="section-title">Guía rápida para la población</div>
+            <div class="section-subtitle">Recomendaciones validadas por niveles de calidad del aire</div>
+            <div class="guidance-grid"></div>
+          </div>
+
+          <div class="footer">
+            <div class="text-muted">Inspirado en WAQI · Datos de referencia locales</div>
+            <div class="links">
+              <a href="https://waqi.info" target="_blank" rel="noreferrer">WAQI</a>
+              <a href="https://datos.gob.pe" target="_blank" rel="noreferrer">Datos Perú</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="drawer" tabindex="0">
+      <header>
+        <div>
+          <div class="drawer-title">Detalle de estación</div>
+          <div class="drawer-meta text-muted">--</div>
+        </div>
+        <button class="drawer-close" aria-label="Cerrar" style="background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;cursor:pointer;">Cerrar</button>
+      </header>
+      <div class="body">
+        <div class="chips" style="margin-bottom:10px;"></div>
+        <table>
+          <tbody></tbody>
+        </table>
+        <div class="separator"></div>
+        <div class="text-muted" style="line-height:1.5;">
+          Las recomendaciones y fuentes se basan en perfiles de cada distrito: tráfico, industria, salinidad costera y altura.
+          Ajusta horarios y rutas según el nivel AQI mostrado.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

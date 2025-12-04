@@ -1,0 +1,38 @@
+[
+  {
+    "nivel": "Bueno / Aceptable",
+    "color": "green",
+    "acciones": [
+      "Actividades al aire libre sin restricciones",
+      "Ventilar viviendas por la mañana",
+      "Priorizar movilidad activa (bicicleta / caminata)"
+    ]
+  },
+  {
+    "nivel": "Moderado",
+    "color": "amber",
+    "acciones": [
+      "Personas sensibles: reducir esfuerzos intensos",
+      "Usar mascarilla si hay polvo o congestión vehicular",
+      "Revisar rutas alternas con menor tráfico"
+    ]
+  },
+  {
+    "nivel": "Peligro",
+    "color": "red",
+    "acciones": [
+      "Evitar ejercicio al aire libre y proteger población vulnerable",
+      "Cerrar ventanas en vías de alto tráfico en horas pico",
+      "Usar mascarillas con filtro y limitar tiempo de exposición"
+    ]
+  },
+  {
+    "nivel": "Industria / Puerto",
+    "color": "blue",
+    "acciones": [
+      "Coordinación con seguridad industrial y salud ocupacional",
+      "Monitorear gases criterio en patios y almacenes",
+      "Implementar barreras verdes y mantenimiento de filtros"
+    ]
+  }
+]
