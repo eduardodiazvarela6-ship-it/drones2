@@ -1,0 +1,122 @@
+[
+  {
+    "id": "ate-puruchuco",
+    "distrito": "Ate",
+    "zona": "Puruchuco – Backus + Corredor Rojo",
+    "descripcion": "Parque Puruchuco con influencia de la planta Backus y del Corredor Rojo",
+    "lat": -12.031,
+    "lon": -76.925,
+    "pm25": 80,
+    "pm10": 120,
+    "co2": 1050,
+    "co": 1.4,
+    "estado": "PELIGRO",
+    "fuentes": "Planta industrial Backus, camiones de reparto, buses del Corredor Rojo y autos particulares",
+    "recomendacion": "Monitorear en horas pico e informar a población sensible sobre uso de mascarilla",
+    "imagenes": {
+      "zona": "https://scontent.flim23-1.fna.fbcdn.net/v/t39.30808-6/541484251_1233471928816947_574158307341567002_n.jpg",
+      "detalle1": "https://gestion.pe/resizer/v2/O7ZWTMHQWBEGJGKUKUU56EPJFU.jpg?width=924&height=530&quality=75&smart=true",
+      "detalle2": "https://portal.andina.pe/EDPfotografia3/Thumbnail/2021/05/24/000776577W.webp"
+    }
+  },
+  {
+    "id": "callao-puerto",
+    "distrito": "Callao",
+    "zona": "Puerto del Callao + Av. Faucett",
+    "descripcion": "Zona portuaria con almacenes, contenedores y avenidas de alto flujo",
+    "lat": -12.061,
+    "lon": -77.14,
+    "pm25": 140,
+    "pm10": 190,
+    "co2": 1350,
+    "co": 1.8,
+    "estado": "PELIGRO",
+    "fuentes": "Buques, camiones de carga, maquinaria portuaria y tráfico intenso",
+    "recomendacion": "Requiere monitoreo continuo y barreras verdes para mitigar emisiones",
+    "imagenes": {
+      "zona": "https://imgmedia.larepublica.pe/1000x590/larepublica/original/2025/05/01/681401e481866260cb0113fe.webp",
+      "detalle1": "https://tierravivahoteles.com/wp-content/uploads/2014/04/PUERTO-DEL-CALLAO.png",
+      "detalle2": "https://diariocorreo.pe/resizer/v2/QK4E34F4VFFFJM4QGNEQDY3PFQ.jpg?width=1200&height=800&quality=75&smart=true"
+    }
+  },
+  {
+    "id": "san-isidro",
+    "distrito": "San Isidro",
+    "zona": "Parques + zona financiera",
+    "descripcion": "Parques urbanos rodeados de edificios de oficinas y avenidas",
+    "lat": -12.099,
+    "lon": -77.036,
+    "pm25": 55,
+    "pm10": 85,
+    "co2": 800,
+    "co": 0.9,
+    "estado": "MODERADO",
+    "fuentes": "Autos particulares, buses, climatización de edificios y actividades comerciales",
+    "recomendacion": "Buen lugar para actividades al aire libre en horas de menor tráfico",
+    "imagenes": {
+      "zona": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/San_Isidro%2C_Lima%2C_Peru_-_Torre_Begonias.jpg/1200px-San_Isidro%2C_Lima%2C_Peru_-_Torre_Begonias.jpg",
+      "detalle1": "https://www.fundamenta.pe/static/3e8bc394e2db542f7fc7f92ac738d126/62887/mejores-parques-san-isidro.jpg",
+      "detalle2": "https://alba-pe-atv.cdn.mediatiquepress.com/wp-content/uploads/2024/01/WhatsApp-Image-2024-01-30-at-19.44.18.jpeg"
+    }
+  },
+  {
+    "id": "villa-el-salvador",
+    "distrito": "Villa El Salvador",
+    "zona": "Zona industrial y residencial",
+    "descripcion": "Sector con parques cercanos a zonas de manufactura, talleres y viviendas",
+    "lat": -12.21,
+    "lon": -76.94,
+    "pm25": 110,
+    "pm10": 150,
+    "co2": 1150,
+    "co": 1.6,
+    "estado": "PELIGRO",
+    "fuentes": "Pequeñas y medianas industrias, hornos, camiones y transporte público",
+    "recomendacion": "Campañas de sensibilización y reconversión tecnológica para reducir emisiones",
+    "imagenes": {
+      "zona": "https://elcomercio.pe/resizer/NNHwx4ClsqPvQDyPVXCURGryPc8=/980x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/SHMAAUKGPJFO3DY7O6AO6TQKOY.jpg",
+      "detalle1": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-7oaUPSMzSV4o87K0S8w6z7DJ5I-J-KIfug&s",
+      "detalle2": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Z-vM4thhi77hU-Vu9wKC-nAwBN_i_2V-1Q&s"
+    }
+  },
+  {
+    "id": "miraflores-costa-verde",
+    "distrito": "Miraflores",
+    "zona": "Costa Verde y parques centrales",
+    "descripcion": "Área turística con parques y acceso a la Costa Verde",
+    "lat": -12.122,
+    "lon": -77.03,
+    "pm25": 45,
+    "pm10": 65,
+    "co2": 720,
+    "co": 0.7,
+    "estado": "BUENO",
+    "fuentes": "Tránsito vehicular en la Costa Verde y avenidas principales",
+    "recomendacion": "Apto para deporte al aire libre; reforzar movilidad sostenible",
+    "imagenes": {
+      "zona": "https://www.peru.travel/Contenido/Upload/Imagenes/01/09/3.1/Archivo/2f6a9b2f-1c02-46b9-9e56-d05b7f433175.jpg",
+      "detalle1": "https://cdn.forbes.pe/2023/09/miraflores.png",
+      "detalle2": "https://imagenes.elpais.com/resizer/v2/6MZFVGBSZJZJ3GLY2BHQ6V4YUU.jpg"
+    }
+  },
+  {
+    "id": "rimac-centro",
+    "distrito": "Rímac",
+    "zona": "Centro histórico y cuenca del río",
+    "descripcion": "Zona con patrimonio histórico y actividad industrial ligera",
+    "lat": -12.046,
+    "lon": -77.03,
+    "pm25": 95,
+    "pm10": 140,
+    "co2": 980,
+    "co": 1.2,
+    "estado": "ALTO",
+    "fuentes": "Tráfico pesado hacia el centro, buses y polvo resuspendido",
+    "recomendacion": "Limitar exposición en horas pico; considerar rutas alternas",
+    "imagenes": {
+      "zona": "https://elperuano.pe/fotografia/thumbnail/2023/12/08/000185498M.jpg",
+      "detalle1": "https://rpp.pe/medio/2018/12/04/plaza-de-acho-2_909564.jpg",
+      "detalle2": "https://larepublica.cronosmedia.glr.pe/original/2022/04/20/625ff87626039e120963b3af.jpg"
+    }
+  }
+]
