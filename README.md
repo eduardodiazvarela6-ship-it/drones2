@@ -1,28 +1,28 @@
-# EcoDrones Lima
+# EcoDrones Lima & Callao
 
-Dashboard estático para visualizar zonas de riesgo de calidad de aire monitoreadas por drones en Lima Metropolitana.
+Panel estilo WAQI para monitorear calidad de aire simulada en Lima, Callao y cobertura nacional de referencia.
+
+## Características
+- **Mapa interactivo Leaflet** con marcadores por estación y leyenda de colores AQI.
+- **25+ estaciones** en distritos de Lima/Callao y provincias cercanas con PM2.5, PM10, NO₂, SO₂, O₃ y CO.
+- **Filtro y búsqueda** por distrito/zona con tarjetas sincronizadas con el mapa y panel lateral.
+- **KPIs rápidos** (promedios PM, pico AQI y conteo de estaciones).
+- **Drawer de detalle** con ubicación, fuentes de emisión y recomendaciones instantáneas.
+- **Cobertura nacional**: 10 departamentos resumidos como referencia para expansión.
+- **Fecha/hora dinámica local** (es-PE) en la cabecera.
+
+## Ejecutar localmente
+```bash
+npm install
+npm start
+```
+Luego abre `http://localhost:3000` (por defecto `serve` usa ese puerto) y verás el dashboard en `web/`.
 
 ## Estructura
-- `web/index.html`: interfaz con mapa Leaflet, filtros por distrito/buscador y tarjetas de zonas.
-- `web/data/zonas.json`: catálogo editable de zonas con coordenadas, contaminantes, fuentes y recomendaciones.
-- `web/data/nodered_flow.json`: flujo exportado desde Node-RED del dashboard original.
+- `web/index.html`: SPA estática con Leaflet y estilos.
+- `web/data/air_quality.json`: dataset simulados de estaciones y departamentos.
+- `package.json`: script para servir la carpeta `web`.
 
-## Uso rápido
-1. Instala dependencias mínimas y sirve la carpeta `web` (requiere Node 18+):
-   ```bash
-   npm install
-   npm start
-   ```
-   Abre `http://localhost:3000` (o el puerto que indique `serve`).
-
-2. Edita `web/data/zonas.json` para añadir todos los distritos de Lima y sus zonas locales. Cada entrada puede incluir imágenes y estados de riesgo.
-
-3. Comparte la carpeta `web` en cualquier hosting estático (S3, Netlify, Vercel) para que clientes accedan desde móvil o PC.
-
-## Integrar con Node-RED
-- Importa `web/data/nodered_flow.json` en tu instancia de Node-RED para seguir generando datos desde el dron.
-- Ajusta tu flujo para publicar los valores en una API o archivo JSON consumido por este dashboard.
-
-## Personalización
-- El diseño usa solo HTML/CSS/JS + Leaflet CDN. Puedes reemplazar el `fetch` de `zonas.json` por una URL de API real.
-- Los estados admitidos en las etiquetas son: `BUENO`, `MODERADO`, `ALTO`, `PELIGRO`, `CRITICO`.
+## Notas
+- Los valores son simulados con rangos realistas inspirados en perfiles urbanos/industriales de Lima y Callao.
+- Se pensó para usarse offline/edge; basta un servidor estático para desplegar (GitHub Pages, Vercel, Nginx).
